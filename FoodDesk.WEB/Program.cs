@@ -1,5 +1,6 @@
 using FoodDesk.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
+using FoodDesk.Infrastructure.Identity;
 
 namespace FoodDesk.WEB;
 
@@ -11,12 +12,16 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+        builder.Services.AddRazorPages();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             options.UseNpgsql(connectionString);
         });
+
+        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddEntityFrameworkStores<ApplicationDbContext>();
 
         var app = builder.Build();
 
@@ -31,6 +36,7 @@ public class Program
         app.UseHttpsRedirection();
         app.UseRouting();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapStaticAssets();
@@ -38,6 +44,8 @@ public class Program
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}")
             .WithStaticAssets();
+
+        app.MapRazorPages();
 
         app.Run();
     }
