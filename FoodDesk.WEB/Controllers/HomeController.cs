@@ -1,9 +1,11 @@
 using System.Diagnostics;
 using FoodDesk.WEB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodDesk.WEB.Controllers
 {
+    [Authorize(Roles = "client")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

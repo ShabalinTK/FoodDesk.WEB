@@ -1,6 +1,7 @@
 using FoodDesk.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using FoodDesk.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace FoodDesk.WEB;
 
@@ -21,6 +22,7 @@ public class Program
         });
 
         builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         var app = builder.Build();
@@ -39,11 +41,19 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
+            );
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}"
+            );
+        });
+
         app.MapStaticAssets();
-        app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}")
-            .WithStaticAssets();
 
         app.MapRazorPages();
 
