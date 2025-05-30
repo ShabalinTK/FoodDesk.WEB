@@ -485,7 +485,7 @@
 
 	var handleSupport = function(){
 		var support = '<a href="javascript:void(0);" class="bt-buy-now theme-btn DZBuyNowBtn"><span>Buy Now</span></a><a href="#demo" class="bt-demo theme-btn"><span>Check Demo</span></a>';
-		var dzscript = '<script id="DZScript" src="../../dzassets.s3.amazonaws.com/w3-global9753.js?btn_dir=right&amp;bt_pd=60"></script>';
+		var dzscript = '<script id="DZScript" src="../../FoodDesk/dzassets.s3.amazonaws.com/w3-global9753.js?btn_dir=right&amp;bt_pd=60"></script>';
 		jQuery('body').append(support+dzscript);
 	}
 	
