@@ -27,4 +27,9 @@
     <ProjectReference Include="..\FoodDesk.Persistence\FoodDesk.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\AdminPanel\Data\" />
+    <Folder Include="Areas\AdminPanel\Models\" />
+  </ItemGroup>
+
 </Project>
