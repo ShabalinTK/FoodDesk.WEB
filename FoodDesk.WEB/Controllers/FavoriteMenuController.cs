@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FoodDesk.WEB.Controllers
 {
+    [Authorize(Roles = "client")]
     public class FavoriteMenuController : Controller
     {
         public IActionResult Index()
