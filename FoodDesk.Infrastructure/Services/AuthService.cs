@@ -25,11 +25,6 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
             return false;
 
-        if (iscourier)
-        {
-            await _userManager.AddToRoleAsync(user, "courier");
-        }
-
         await _signInManager.SignInAsync(user, isPersistent: false);
 
         // Отправка письма
