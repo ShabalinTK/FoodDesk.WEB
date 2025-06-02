@@ -2,6 +2,7 @@
 using FoodDesk.Application.Features.Auth.Queries.Login;
 using FoodDesk.WEB.Models.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,6 +61,13 @@ namespace FoodDesk.WEB.Controllers
 
             //ModelState.AddModelError(string.Empty, result.Error);
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            return RedirectToAction("Index", "Home");
         }
     }
 }
