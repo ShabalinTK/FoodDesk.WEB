@@ -1,4 +1,5 @@
-﻿using FoodDesk.Application.Features.Auth.Command.Register;
+﻿using FoodDesk.Application.Features.Auth.Command.Logout;
+using FoodDesk.Application.Features.Auth.Command.Register;
 using FoodDesk.Application.Features.Auth.Queries.Login;
 using FoodDesk.WEB.Models.Auth;
 using MediatR;
@@ -66,7 +67,7 @@ namespace FoodDesk.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            await _mediator.Send(new LogoutCommand());
             return RedirectToAction("Index", "Home");
         }
     }

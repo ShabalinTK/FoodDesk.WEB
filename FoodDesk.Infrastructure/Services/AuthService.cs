@@ -10,7 +10,7 @@ namespace FoodDesk.Infrastructure.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         //private readonly IEmailSender _emailSender;
 
-        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)//, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -42,6 +42,10 @@ namespace FoodDesk.Infrastructure.Services
             var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
 
             return result.Succeeded;
+        }
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }
