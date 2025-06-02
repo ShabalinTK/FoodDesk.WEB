@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FoodDesk.WEB.Controllers
+namespace FoodDesk.WEB.Controllers;
+
+public class ErrorController : Controller
 {
-    public class ErrorController : Controller
+    [Route("Error/{statusCode}")]
+    public IActionResult HandleError(int statusCode)
     {
-        [Route("Error/{statusCode}")]
-        public IActionResult HandleError(int statusCode)
-        {
-            return View(statusCode.ToString());
-        }
+        return View(statusCode.ToString());
     }
 }

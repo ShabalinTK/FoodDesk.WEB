@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FoodDesk.WEB.Controllers
+namespace FoodDesk.WEB.Controllers;
+
+[Authorize(Roles = "courier")]
+public class DeliverOrderController : Controller
 {
-    [Authorize(Roles = "courier")]
-    public class DeliverOrderController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }

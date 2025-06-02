@@ -4,7 +4,6 @@ using FoodDesk.Infrastructure.Extensions;
 using FoodDesk.Infrastructure.Identity;
 using FoodDesk.Infrastructure.Services;
 using FoodDesk.Persistence.Context;
-using FoodDesk.Persistence.Context;
 using FoodDesk.Persistence.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -1,5 +1,4 @@
 ﻿using FoodDesk.Domain.Common.Interfaces;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FoodDesk.Domain.Common;
 
