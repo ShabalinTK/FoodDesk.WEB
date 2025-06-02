@@ -8,6 +8,7 @@ using FoodDesk.Persistence.Context;
 using FoodDesk.Persistence.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace FoodDesk.WEB;
 
@@ -33,6 +34,18 @@ public class Program
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddScoped<IAuthService, AuthService>();
+
+        builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+        builder.Services.AddScoped<IEmailSender, EmailSender>(sp =>
+        {
+            var emailSettings = sp.GetRequiredService<IOptions<EmailSettings>>().Value;
+            return new EmailSender(
+                emailSettings.SmtpHost,
+                emailSettings.SmtpPort,
+                emailSettings.SmtpUser,
+                emailSettings.SmtpPass
+            );
+        });
 
         var app = builder.Build();
 
