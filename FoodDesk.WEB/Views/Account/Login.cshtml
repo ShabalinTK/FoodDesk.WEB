@@ -1,8 +1,4 @@
-﻿@page
-@model LoginModel
-
-@{
-	ViewData["Title"] = "Log in";
+﻿@{
 	Layout = null;
 }
 
@@ -53,30 +49,28 @@
 										<h4 class="fs-20 font-w800 text-black">Create an Account</h4>
 										<span class="dlab-sign-up">Sign Up</span>
 									</div>
-									<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-									<form id="account" method="post">
+									<form method="post">
 										<div class="mb-3">
-											<label class="form-label"><strong>Username</strong></label>
-											<input asp-for="Input.Username" class="form-control">
-											<span asp-validation-for="Input.Username" class="text-danger"></span>
+											<label class="mb-1"><strong>Email Address</strong></label>
+											<input name="email" type="email" class="form-control">
 										</div>
 										<div class="mb-3">
-											<label class="form-label"><strong>Password</strong></label>
-											<input asp-for="Input.Password" class="form-control">
-											<span asp-validation-for="Input.Password" class="text-danger"></span>
+											<label class="mb-1"><strong>Password</strong></label>
+											<input name="password" type="password" class="form-control">
 										</div>
-										<div class="checkbox mb-3">
-											<label asp-for="Input.RememberMe" class="form-label">
-												<input asp-for="Input.RememberMe" class="form-check-input">
-												@Html.DisplayNameFor(m => m.Input.RememberMe)
-											</label>
+										<div class="row d-flex justify-content-between mt-4 mb-2">
+											<div class="mb-3">
+												<div class="form-check custom-checkbox ms-1">
+													<input type="checkbox" class="form-check-input">
+													<label class="form-check-label" for="basic_checkbox_1">Remember my preference</label>
+												</div>
+											</div>
+											<div class="mb-3">
+												<a href="page-forgot-password.html">Forgot Password?</a>
+											</div>
 										</div>
-										<div class="mb-3">
-											<a class="btn btn-link" asp-page="/Account/ForgotPassword">Forgot Password?</a>
-										</div>
-										<div class="mb-3 d-flex justify-content-between gap-2">
-											<button type="submit" class="btn btn-primary w-100 me-2">Sign me In</button>
-											<a class="btn btn-outline-primary w-100" href="/" role="button">Cancel</a>
+										<div class="text-center">
+											<button type="submit" class="btn btn-primary btn-block shadow">Sign Me In</button>
 										</div>
 									</form>
 									<div class="text-center my-3">
@@ -87,6 +81,10 @@
 										<button class="btn btn-outline-light"><i class="fa-brands fa-google me-2 google"></i>Google</button>
 										<button class="btn btn-outline-light mt-lg-0 mt-md-1 mt-sm-0 mt-1 linked-btn"><i class="fa-brands fa-linkedin me-2 likedin"></i>linkedin</button>
 									</div>
+									<div class="text-center">
+										<span>Already Have An Account?<a href="/Register" class="text-primary"> Sign up</a></span>
+									</div>
+
 								</div>
 							</div>
 						</div>
@@ -102,5 +100,6 @@
 	<script src="~/FoodDesk/vendor/global/global.min.js"></script>
 	<script src="~/FoodDesk/vendor/swiper/js/swiper-bundle.min.js"></script>
 	<script src="~/FoodDesk/js/dlabnav-init.js"></script>
+	<script src="~/FoodDesk/js/styleSwitcher.js"></script>
 </body>
 </html>

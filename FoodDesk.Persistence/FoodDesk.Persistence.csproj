@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CleanArchitectureDemo.Application\FoodDesk.Application.csproj" />
+    <ProjectReference Include="..\FoodDesk.Application\FoodDesk.Application.csproj" />
     <ProjectReference Include="..\FoodDesk.Infrastructure\FoodDesk.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,13 @@
-using FoodDesk.Persistence.Context;
-using Microsoft.EntityFrameworkCore;
+using FoodDesk.Application.Extensions;
+using FoodDesk.Application.Interfaces.Services;
+using FoodDesk.Infrastructure.Extensions;
 using FoodDesk.Infrastructure.Identity;
+using FoodDesk.Infrastructure.Services;
+using FoodDesk.Persistence.Context;
+using FoodDesk.Persistence.Context;
+using FoodDesk.Persistence.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodDesk.WEB;
 
@@ -11,19 +17,22 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => { })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+        // Add services to the container.
+        builder.Services.AddApplicationLayer();
+        builder.Services.AddInfrastructureLayer();
+        builder.Services.AddPersistenceLayer(builder.Configuration);
+
         // Add services to the container.
         builder.Services.AddControllersWithViews();
-        builder.Services.AddRazorPages();
 
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        {
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            options.UseNpgsql(connectionString);
-        });
-
-        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
 
         var app = builder.Build();
 
@@ -38,24 +47,21 @@ public class Program
         app.UseHttpsRedirection();
         app.UseRouting();
 
-        app.UseAuthentication();
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
-                name: "areas",
-                pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
-            );
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"
+              name: "areas",
+              pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
             );
         });
 
         app.MapStaticAssets();
-
-        app.MapRazorPages();
+        app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}")
+            .WithStaticAssets();
 
         app.Run();
     }

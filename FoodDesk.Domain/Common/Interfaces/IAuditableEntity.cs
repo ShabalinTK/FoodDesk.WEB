@@ -1,4 +1,5 @@
 ﻿namespace FoodDesk.Domain.Common.Interfaces;
+
 public interface IAuditableEntity : IEntity
 {
     int? CreatedBy { get; set; }

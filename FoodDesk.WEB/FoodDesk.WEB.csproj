@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FoodDesk.Application\FoodDesk.Application.csproj" />
     <ProjectReference Include="..\FoodDesk.Persistence\FoodDesk.Persistence.csproj" />
   </ItemGroup>
 
