@@ -19,11 +19,16 @@ public class AuthService : IAuthService
 
     public async Task<bool> RegisterAsync(string username, string email, string password, string confirmpassword, bool iscourier)
     {
-        var user = new ApplicationUser { Email = email, UserName = email };
+        var user = new ApplicationUser { Email = email, UserName = username, IsCourier = iscourier };
         var result = await _userManager.CreateAsync(user, password);
 
         if (!result.Succeeded)
             return false;
+
+        if (iscourier)
+        {
+            await _userManager.AddToRoleAsync(user, "courier");
+        }
 
         await _signInManager.SignInAsync(user, isPersistent: false);
 

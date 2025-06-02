@@ -50,7 +50,8 @@ public class AccountController : Controller
             UserName = model.UserName,
             Email = model.Email,
             Password = model.Password,
-            ConfirmPassword = model.ConfirmPassword
+            ConfirmPassword = model.ConfirmPassword,
+            IsCourier = model.IsCourier
         };
 
         var IsSuccess = await _mediator.Send(command);
