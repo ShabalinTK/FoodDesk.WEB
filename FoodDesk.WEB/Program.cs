@@ -5,6 +5,7 @@ using FoodDesk.Infrastructure.Identity;
 using FoodDesk.Infrastructure.Services;
 using FoodDesk.Persistence.Context;
 using FoodDesk.Persistence.Extensions;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -24,12 +25,10 @@ public class Program
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-        // Add services to the container.
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer();
         builder.Services.AddPersistenceLayer(builder.Configuration);
 
-        // Add services to the container.
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddScoped<IAuthService, AuthService>();
@@ -48,13 +47,23 @@ public class Program
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
+                    var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (errorFeature != null)
+                    {
+                        context.Response.StatusCode = 500;
+                    }
+                });
+            });
             app.UseHsts();
         }
+
+        app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
         app.UseHttpsRedirection();
         app.UseRouting();
@@ -65,17 +74,15 @@ public class Program
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
-              name: "areas",
-              pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
+                name: "areas",
+                pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
             );
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
         });
 
         app.MapStaticAssets();
-        app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}")
-            .WithStaticAssets();
-
         app.Run();
     }
 }
