@@ -67,12 +67,11 @@ namespace FoodDesk.Persistence.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("UserProfileId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserProfileId");
 
                     b.ToTable("Orders");
                 });
@@ -144,38 +143,6 @@ namespace FoodDesk.Persistence.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("FoodDesk.Domain.Entities.UserProfile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsCourier")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserProfiles");
-                });
-
             modelBuilder.Entity("FoodDesk.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -183,6 +150,10 @@ namespace FoodDesk.Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -395,17 +366,6 @@ namespace FoodDesk.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("FoodDesk.Domain.Entities.Order", b =>
-                {
-                    b.HasOne("FoodDesk.Domain.Entities.UserProfile", "UserProfile")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserProfile");
-                });
-
             modelBuilder.Entity("FoodDesk.Domain.Entities.OrderItem", b =>
                 {
                     b.HasOne("FoodDesk.Domain.Entities.Order", "Order")
@@ -493,11 +453,6 @@ namespace FoodDesk.Persistence.Migrations
             modelBuilder.Entity("FoodDesk.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("FoodDesk.Domain.Entities.UserProfile", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

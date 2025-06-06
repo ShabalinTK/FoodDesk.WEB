@@ -25,6 +25,16 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
             return false;
 
+        // Назначаем роль в зависимости от типа пользователя
+        if (iscourier)
+        {
+            await _userManager.AddToRoleAsync(user, "courier");
+        }
+        else
+        {
+            await _userManager.AddToRoleAsync(user, "client");
+        }
+
         await _signInManager.SignInAsync(user, isPersistent: false);
 
         // Отправка письма
