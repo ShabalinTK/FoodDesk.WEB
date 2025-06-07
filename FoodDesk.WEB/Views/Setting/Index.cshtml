@@ -1,4 +1,5 @@
-﻿@{
+﻿@model FoodDesk.WEB.Models.SettingsViewModel
+@{
 	ViewData["Title"] = "Setting Page";
 }
 
@@ -92,55 +93,72 @@
 									<p class="fs-18">Photo Profile</p>
 									<div class="setting-img d-flex align-items-center mb-4">
 										<div class="avatar-upload d-flex align-items-center">
-											<div class=" change position-relative d-flex">
+											<div class="change position-relative d-flex">
 												<div class="avatar-preview">
-													<div id="imagePreview" style="background-image: url(images/no-img-avatar.png);">
+													<div id="imagePreview" style="background-image: url('@(Model.ProfileImageUrl ?? "/FoodDesk/images/no-img-avatar.png")');">
 													</div>
 												</div>
 												<div class="change-btn d-flex align-items-center flex-wrap">
-													<input type='file' class="form-control" id="imageUpload" accept=".png, .jpg, .jpeg" />
+													<input type="file" class="form-control" id="imageUpload" name="ProfileImage" accept=".png, .jpg, .jpeg" />
 													<label for="imageUpload" class="dlab-upload">Choose File</label>
-													<a href="javascript:void" class="btn remove-img ms-2">Remove</a>
+													<a href="javascript:void(0);" class="btn remove-img ms-2" onclick="removeImage()">Remove</a>
 												</div>
 											</div>
-
-										</div>
-
-									</div>
-
-									<div class="row">
-										<div class="col-xl-6 col-sm-6">
-											<div class="setting-input">
-												<label for="exampleInputtext" class="form-label">Username</label>
-												<input type="text" class="form-control" id="exampleInputtext" placeholder="Jordan Nico">
-											</div>
-											<div class="setting-input">
-												<label for="exampleInputEmail1" class="form-label">Email address</label>
-												<input type="email" class="form-control" id="exampleInputEmail1" placeholder="ordanico@mail.com">
-											</div>
-											<div class="setting-input">
-												<p class="fs-18 mb-2">Your Location</p>
-												<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227748.3825624477!2d75.65046970649679!3d26.88544791796718!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C+Rajasthan!5e0!3m2!1sen!2sin!4v1500819483219" style="border:0; width:100%; min-height:100%; margin-bottom: -8px;" allowfullscreen></iframe>
-
-											</div>
-										</div>
-										<div class="col-xl-6 col-sm-6">
-											<div class="setting-input">
-												<label for="exampleInputnumber" class="form-label">Phone</label>
-												<input type="number" class="form-control" id="exampleInputnumber" placeholder="+123456789">
-											</div>
-											<div class="setting-input">
-												<label for="exampleInputPassword1" class="form-label">Password</label>
-												<input type="password" class="form-control" id="exampleInputPassword1" placeholder="••••••••">
-											</div>
-											<div class="setting-input">
-												<label class="form-label">Address Details</label>
-												<textarea class="form-control py-3" rows="3"></textarea>
-											</div>
-											<a href="javascript:void(0);" class="btn btn-primary float-end w-50 btn-md">Save Setting</a>
-
 										</div>
 									</div>
+
+									<form asp-action="Index" method="post" enctype="multipart/form-data">
+										@Html.AntiForgeryToken()
+										<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+										<div class="row">
+											<div class="col-xl-6 col-sm-6">
+												<div class="setting-input">
+													<label for="UserName" class="form-label">Username</label>
+													<input type="text" class="form-control" id="UserName" name="UserName" value="@Model.UserName" required />
+												</div>
+												<div class="setting-input">
+													<label for="Email" class="form-label">Email address</label>
+													<input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required />
+												</div>
+												<div class="setting-input">
+													<p class="fs-18 mb-2">Your Location</p>
+													<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227748.3825624477!2d75.65046970649679!3d26.88544791796718!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C+Rajasthan!5e0!3m2!1sen!2sin!4v1500819483219" style="border:0; width:100%; min-height:100%; margin-bottom: -8px;" allowfullscreen></iframe>
+												</div>
+											</div>
+											<div class="col-xl-6 col-sm-6">
+												<div class="setting-input">
+													<label for="PhoneNumber" class="form-label">Phone</label>
+													<input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" />
+												</div>
+												<div class="setting-input">
+													<label for="Password" class="form-label">Password</label>
+													<input type="password" class="form-control" id="Password" name="Password" placeholder="Leave blank to keep unchanged" />
+												</div>
+												<div class="setting-input">
+													<label for="Address" class="form-label">Address Details</label>
+													<textarea class="form-control py-3" rows="3" id="Address" name="Address">@Model.Address</textarea>
+												</div>
+												<button type="submit" class="btn btn-primary float-end w-50 btn-md">Save Setting</button>
+											</div>
+										</div>
+									</form>
+
+									<script>
+										function removeImage() {
+											document.getElementById('imagePreview').style.backgroundImage = "url('/FoodDesk/images/no-img-avatar.png')";
+											document.getElementById('imageUpload').value = '';
+										}
+
+										document.getElementById('imageUpload').addEventListener('change', function () {
+											if (this.files && this.files[0]) {
+												var reader = new FileReader();
+												reader.onload = function (e) {
+													document.getElementById('imagePreview').style.backgroundImage = "url('" + e.target.result + "')";
+												};
+												reader.readAsDataURL(this.files[0]);
+											}
+										});
+									</script>
 								</div>
 							</div>
 						</div>

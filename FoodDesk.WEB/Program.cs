@@ -25,6 +25,14 @@ public class Program
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+        // Добавляем поддержку сессий
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30); // Время жизни сессии
+            options.Cookie.HttpOnly = true; // Защита cookie
+            options.Cookie.IsEssential = true; // Для GDPR
+        });
+
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer();
         builder.Services.AddPersistenceLayer(builder.Configuration);
@@ -66,7 +74,12 @@ public class Program
         app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
         app.UseHttpsRedirection();
+        app.UseStaticFiles(); // Если MapStaticAssets не настроен
+
         app.UseRouting();
+
+        // Добавляем middleware для сессий
+        app.UseSession();
 
         app.UseAuthentication();
         app.UseAuthorization();

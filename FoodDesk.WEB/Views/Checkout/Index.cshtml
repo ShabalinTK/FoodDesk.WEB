@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Checkout Page";
+}
+
+<div class="content-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form asp-action="Index" method="post">
+                            <div class="row">
+                                <div class="col-xl-8">
+                                    <div class="basci-bx mb-3">
+                                        <div class="basci-title">
+                                            <h4>Your basic information</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <div class="mb-3">
+                                                    <input type="text" class="form-control" name="FirstName" placeholder="First Name" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div class="mb-3">
+                                                    <input type="text" class="form-control" name="LastName" placeholder="Last Name" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-12">
+                                                <div class="mb-3">
+                                                    <input type="email" class="form-control" name="Email" placeholder="Email Address" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-12">
+                                                <div class="mb-3">
+                                                    <input type="text" class="form-control" name="Phone" placeholder="Phone" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="Billing-bx mb-3">
+                                        <div class="billing-title">
+                                            <h4>Billing address</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="mb-3">
+                                                    <input type="text" class="form-control" name="Address" placeholder="Address" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div class="mb-3">
+                                                    <input type="text" class="form-control" name="City" placeholder="City" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div class="mb-3">
+                                                    <input type="text" class="form-control" name="Country" placeholder="Country" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="payment-bx mb-3">
+                                        <div class="payment-title">
+                                            <h4>Your payment information</h4>
+                                        </div>
+                                        <input type="hidden" name="TipAmount" />
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="mb-3">
+                                                    <input type="number" class="form-control" name="CardNumber" placeholder="Enter a card no." required />
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <select class="form-control default-select ms-0 py-4 wide mb-xl-0 mb-3" name="ExpiryMonth" required>
+                                                    <option value="">Month</option>
+                                                    <option value="Jan">Jan</option>
+                                                    <option value="Feb">Feb</option>
+                                                    <option value="Marc">March</option>
+                                                    <option value="Apri">April</option>
+                                                    <option value="May">May</option>
+                                                    <option value="June">June</option>
+                                                    <option value="July">July</option>
+                                                    <option value="Aug">Aug</option>
+                                                    <option value="Sept">Sept</option>
+                                                    <option value="Oct">Oct</option>
+                                                    <option value="Nov">Nov</option>
+                                                    <option value="Dec">Dec</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="mb-3">
+                                                    <input type="text" class="form-control" name="ExpiryYear" placeholder="Year" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="input-group mb-3">
+                                                    <input type="number" class="form-control" name="CVV" placeholder="cvv" required />
+                                                    <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-credit-card"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span>By clicking Checkout Now you agree to the <a href="javascript:void(0);" class="text-primary fw-bold">Term of Service</a> and <a href="javascript:void(0);" class="text-primary fw-bold">privacy policy</a></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="card">
+                                        <div class="card-header py-3">
+                                            <h4 class="mb-0">Your Cart</h4>
+                                        </div>
+                                        <div class="card-body pt-3">
+                                            <div class="checkout-right">
+                                                <span class="checkout-title">ADD A TIP FOR YOUR RIDER</span>
+                                                <p>The entire amount will be transferred to the rider. Valid only if you pay online</p>
+                                                <div class="">
+                                                    <span class="badge badge-primary me-2 c-pointer" data-tip="5">+5</span>
+                                                    <span class="badge badge-primary me-2 c-pointer" data-tip="10">+10</span>
+                                                    <span class="badge badge-primary me-2 c-pointer" data-tip="15">+15</span>
+                                                </div>
+                                                <div class="bill-details mt-4 border-bottom">
+                                                    <h6>Bill Details</h6>
+                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                                        <span>Item Total</span>
+                                                        <span id="cartTotal"><i class="fa-solid fa-dollar-sign"></i></span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                                        <span>Tip Amount</span>
+                                                        <span id="tipAmount"><i class="fa-solid fa-dollar-sign"></i></span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                                        <span>Total</span>
+                                                        <span id="totalAmount"><i class="fa-solid fa-dollar-sign"></i></span>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary btn-block" id="b3">PLACE ORDER</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.badge-primary').forEach(badge => {
+            badge.addEventListener('click', function () {
+                const tip = parseInt(this.getAttribute('data-tip'));
+                document.getElementById('tipAmount').innerHTML = `<i class="fa-solid fa-dollar-sign"></i>${tip}`;
+                const cartTotal = parseFloat(document.getElementById('cartTotal').textContent.replace('$', ''));
+                const total = cartTotal + tip;
+                document.getElementById('totalAmount').innerHTML = `<i class="fa-solid fa-dollar-sign"></i>${total}`;
+                document.querySelector('input[name="TipAmount"]').value = tip;
+            });
+        });
+    });
+</script>

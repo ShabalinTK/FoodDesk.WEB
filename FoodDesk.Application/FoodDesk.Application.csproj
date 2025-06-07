@@ -14,4 +14,8 @@
     <ProjectReference Include="..\FoodDesk.Domain\FoodDesk.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Checkout\Command\" />
+  </ItemGroup>
+
 </Project>
