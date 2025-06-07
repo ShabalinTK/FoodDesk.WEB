@@ -51,13 +51,13 @@
 							<div class="swiper-wrapper">
 								@foreach (var category in Model.Categories)
 								{
-									<div class="swiper-slide">
-										<div class="cate-bx text-center">
-											<div class="card">
-												<div class="card-body">
+								<div class="swiper-slide">
+									<div class="cate-bx text-center">
+										<div class="card">
+											<div class="card-body">
 													<img src="@category.ImageUrl" alt="@category.Name" width="50" height="50">
 													<a href="javascript:void(0);"><h6 class="mb-0 font-w500">@category.Name</h6></a>
-												</div>
+								</div>
 											</div>
 										</div>
 									</div>
@@ -75,43 +75,43 @@
 							<div class="swiper-wrapper">
 								@foreach (var product in Model.Products.Where(p => p.IsPopular))
 								{
-									<div class="swiper-slide">
-										<div class="card dishe-bx">
-											<div class="card-header border-0 pb-0 pt-0 pe-3">
+								<div class="swiper-slide">
+									<div class="card dishe-bx">
+										<div class="card-header border-0 pb-0 pt-0 pe-3">
 												@if (product.Discount > 0)
 												{
 													<span class="badge badge-lg badge-danger side-badge">@product.Discount% Off</span>
 												}
 												<i class="fa-solid fa-heart ms-auto c-heart c-pointer style-1"></i>
-											</div>
-											<div class="card-body p-0 text-center">
+										</div>
+										<div class="card-body p-0 text-center">
 												<img src="@product.ImageUrl" alt="@product.Name">
-											</div>
-											<div class="card-footer border-0 px-3">
-												<ul class="d-flex align-items-center mb-2">
+										</div>
+										<div class="card-footer border-0 px-3">
+											<ul class="d-flex align-items-center mb-2">
 													@for (int i = 0; i < 5; i++)
 													{
-														<li>
-															<svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<li>
+													<svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 																<path d="M8.10326 0.816986C8.47008 0.0737399 9.52992 0.07374 9.89674 0.816986L11.7063 4.48347C11.8519 4.77862 12.1335 4.98319 12.4592 5.03051L16.5054 5.61846C17.3256 5.73765 17.6531 6.74562 17.0596 7.32416L14.1318 10.1781C13.8961 10.4079 13.7885 10.7389 13.8442 11.0632L14.5353 15.0931C14.6754 15.91 13.818 16.533 13.0844 16.1473L9.46534 14.2446C9.17402 14.0915 8.82598 14.0915 8.53466 14.2446L4.91562 16.1473C4.18199 16.533 3.32456 15.91 3.46467 15.0931L4.15585 11.0632C4.21148 10.7389 4.10393 10.4079 3.86825 10.1781L0.940385 7.32416C0.346867 6.74562 0.674378 5.73765 1.4946 5.61846L5.54081 5.03051C5.86652 4.98319 6.14808 4.77862 6.29374 4.48347L8.10326 0.816986Z" fill="@(i < Math.Floor(product.Rating) ? "#FC8019" : "#DBDBDB")" />
-															</svg>
-														</li>
+													</svg>
+												</li>
 													}
-												</ul>
-												<div class="common d-flex align-items-end justify-content-between">
-													<div>
+											</ul>
+											<div class="common d-flex align-items-end justify-content-between">
+												<div>
 														<a href="javascript:void(0);"><h4>@product.Name</h4></a>
 														<h3 class="font-w700 mb-0 text-primary">$@product.Price</h3>
 													</div>
 													<div class="plus c-pointer" data-product-id="@product.Id">
-														<div class="sub-bx">
-															<a href="javascript:void(0);" class="text-white"></a>
-														</div>
+													<div class="sub-bx">
+														<a href="javascript:void(0);" class="text-white"></a>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
+								</div>
 								}
 							</div>
 							<div class="swiper-pagination"></div>
@@ -128,25 +128,25 @@
 								{
 									foreach (var item in order.OrderItems)
 									{
-										<div class="swiper-slide">
-											<div class="card dishe-bx b-hover review style-1">
-												<div class="card-header border-0 pt-0 pb-0">
-													<i class="fa-solid fa-heart ms-auto c-heart c-pointer style-1"></i>
-												</div>
-												<div class="card-body text-center py-3">
+									<div class="swiper-slide">
+										<div class="card dishe-bx b-hover review style-1">
+											<div class="card-header border-0 pt-0 pb-0">
+												<i class="fa-solid fa-heart ms-auto c-heart c-pointer style-1"></i>
+											</div>
+											<div class="card-body text-center py-3">
 													<img src="@item.Product.ImageUrl" alt="@item.Product.Name">
-												</div>
-												<div class="card-footer pt-0 border-0 text-center">
-													<div>
+											</div>
+											<div class="card-footer pt-0 border-0 text-center">
+												<div>
 														<a href="javascript:void(0);"><h4 class="mb-0">@item.Product.Name</h4></a>
 														<h3 class="font-w700 text-primary">$@item.Price</h3>
-														<div class="d-flex align-items-center justify-content-center">
+													<div class="d-flex align-items-center justify-content-center">
 															<p class="mb-0 pe-2">@order.Distance km</p>
-															<svg width="6" height="7" viewBox="0 0 6 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<circle cx="3" cy="3.5" r="3" fill="#C4C4C4" />
-															</svg>
+														<svg width="6" height="7" viewBox="0 0 6 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<circle cx="3" cy="3.5" r="3" fill="#C4C4C4" />
+														</svg>
 															<p class="mb-0 ps-2">@order.DeliveryTime min</p>
-														</div>
+											</div>
 													</div>
 												</div>
 											</div>

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model CheckoutViewModel
+@{
     ViewData["Title"] = "Checkout Page";
 }
 
@@ -18,22 +19,30 @@
                                         <div class="row">
                                             <div class="col-xl-6">
                                                 <div class="mb-3">
-                                                    <input type="text" class="form-control" name="FirstName" placeholder="First Name" required />
+                                                    <label asp-for="FirstName" class="form-label">Имя</label>
+                                                    <input asp-for="FirstName" class="form-control" placeholder="Введите имя" />
+                                                    <span asp-validation-for="FirstName" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-xl-6">
                                                 <div class="mb-3">
-                                                    <input type="text" class="form-control" name="LastName" placeholder="Last Name" required />
+                                                    <label asp-for="LastName" class="form-label">Фамилия</label>
+                                                    <input asp-for="LastName" class="form-control" placeholder="Введите фамилию" />
+                                                    <span asp-validation-for="LastName" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-xl-12">
                                                 <div class="mb-3">
-                                                    <input type="email" class="form-control" name="Email" placeholder="Email Address" required />
+                                                    <label asp-for="Email" class="form-label">Email</label>
+                                                    <input asp-for="Email" class="form-control" placeholder="Введите email" />
+                                                    <span asp-validation-for="Email" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-xl-12">
                                                 <div class="mb-3">
-                                                    <input type="text" class="form-control" name="Phone" placeholder="Phone" required />
+                                                    <label asp-for="Phone" class="form-label">Телефон</label>
+                                                    <input asp-for="Phone" class="form-control" placeholder="Введите телефон" />
+                                                    <span asp-validation-for="Phone" class="text-danger"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -45,62 +54,80 @@
                                         <div class="row">
                                             <div class="col-xl-12">
                                                 <div class="mb-3">
-                                                    <input type="text" class="form-control" name="Address" placeholder="Address" required />
+                                                    <label asp-for="Address" class="form-label">Адрес</label>
+                                                    <input asp-for="Address" class="form-control" placeholder="Введите адрес" />
+                                                    <span asp-validation-for="Address" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-xl-6">
                                                 <div class="mb-3">
-                                                    <input type="text" class="form-control" name="City" placeholder="City" required />
+                                                    <label asp-for="City" class="form-label">Город</label>
+                                                    <input asp-for="City" class="form-control" placeholder="Введите город" />
+                                                    <span asp-validation-for="City" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-xl-6">
                                                 <div class="mb-3">
-                                                    <input type="text" class="form-control" name="Country" placeholder="Country" required />
+                                                    <label asp-for="Country" class="form-label">Страна</label>
+                                                    <input asp-for="Country" class="form-control" placeholder="Введите страну" />
+                                                    <span asp-validation-for="Country" class="text-danger"></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="payment-bx mb-3">
                                         <div class="payment-title">
-                                            <h4>Your payment information</h4>
+                                            <h4>Платежная информация</h4>
                                         </div>
-                                        <input type="hidden" name="TipAmount" />
+                                        <input type="hidden" asp-for="TipAmount" />
                                         <div class="row">
                                             <div class="col-xl-12">
                                                 <div class="mb-3">
-                                                    <input type="number" class="form-control" name="CardNumber" placeholder="Enter a card no." required />
+                                                    <label asp-for="CardNumber" class="form-label">Номер карты</label>
+                                                    <input asp-for="CardNumber" class="form-control" placeholder="Введите номер карты" />
+                                                    <span asp-validation-for="CardNumber" class="text-danger"></span>
                                                 </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <select class="form-control default-select ms-0 py-4 wide mb-xl-0 mb-3" name="ExpiryMonth" required>
-                                                    <option value="">Month</option>
-                                                    <option value="Jan">Jan</option>
-                                                    <option value="Feb">Feb</option>
-                                                    <option value="Marc">March</option>
-                                                    <option value="Apri">April</option>
-                                                    <option value="May">May</option>
-                                                    <option value="June">June</option>
-                                                    <option value="July">July</option>
-                                                    <option value="Aug">Aug</option>
-                                                    <option value="Sept">Sept</option>
-                                                    <option value="Oct">Oct</option>
-                                                    <option value="Nov">Nov</option>
-                                                    <option value="Dec">Dec</option>
-                                                </select>
                                             </div>
                                             <div class="col-xl-4">
                                                 <div class="mb-3">
-                                                    <input type="text" class="form-control" name="ExpiryYear" placeholder="Year" required />
+                                                    <label asp-for="ExpiryMonth" class="form-label">Месяц</label>
+                                                    <select asp-for="ExpiryMonth" class="form-control default-select ms-0 py-4 wide">
+                                                        <option value="">Выберите месяц</option>
+                                                        <option value="01">Январь</option>
+                                                        <option value="02">Февраль</option>
+                                                        <option value="03">Март</option>
+                                                        <option value="04">Апрель</option>
+                                                        <option value="05">Май</option>
+                                                        <option value="06">Июнь</option>
+                                                        <option value="07">Июль</option>
+                                                        <option value="08">Август</option>
+                                                        <option value="09">Сентябрь</option>
+                                                        <option value="10">Октябрь</option>
+                                                        <option value="11">Ноябрь</option>
+                                                        <option value="12">Декабрь</option>
+                                                    </select>
+                                                    <span asp-validation-for="ExpiryMonth" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-xl-4">
-                                                <div class="input-group mb-3">
-                                                    <input type="number" class="form-control" name="CVV" placeholder="cvv" required />
-                                                    <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-credit-card"></i></span>
+                                                <div class="mb-3">
+                                                    <label asp-for="ExpiryYear" class="form-label">Год</label>
+                                                    <input asp-for="ExpiryYear" class="form-control" placeholder="ГГГГ" />
+                                                    <span asp-validation-for="ExpiryYear" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="mb-3">
+                                                    <label asp-for="CVV" class="form-label">CVV</label>
+                                                    <div class="input-group">
+                                                        <input asp-for="CVV" class="form-control" placeholder="CVV" />
+                                                        <span class="input-group-text"><i class="fa-solid fa-credit-card"></i></span>
+                                                    </div>
+                                                    <span asp-validation-for="CVV" class="text-danger"></span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <span>By clicking Checkout Now you agree to the <a href="javascript:void(0);" class="text-primary fw-bold">Term of Service</a> and <a href="javascript:void(0);" class="text-primary fw-bold">privacy policy</a></span>
+                                        <span>Нажимая "Оформить заказ", вы соглашаетесь с <a href="javascript:void(0);" class="text-primary fw-bold">условиями использования</a> и <a href="javascript:void(0);" class="text-primary fw-bold">политикой конфиденциальности</a></span>
                                     </div>
                                 </div>
                                 <div class="col-xl-4">
@@ -110,26 +137,40 @@
                                         </div>
                                         <div class="card-body pt-3">
                                             <div class="checkout-right">
-                                                <span class="checkout-title">ADD A TIP FOR YOUR RIDER</span>
-                                                <p>The entire amount will be transferred to the rider. Valid only if you pay online</p>
-                                                <div class="">
+                                                <div class="order-items mb-4">
+                                                    @foreach (var item in Model.CartItems)
+                                                    {
+                                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                                            <div>
+                                                                <h6 class="mb-0">@item.Name</h6>
+                                                                <small class="text-muted">x@(item.Quantity)</small>
+                                                            </div>
+                                                            <span class="text-primary">$@(item.Price * item.Quantity)</span>
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                                <span class="checkout-title">ЧАЕВЫЕ КУРЬЕРУ</span>
+                                                <p>Вся сумма будет передана курьеру. Действительно только при онлайн-оплате</p>
+                                                <div class="mb-4">
                                                     <span class="badge badge-primary me-2 c-pointer" data-tip="5">+5</span>
                                                     <span class="badge badge-primary me-2 c-pointer" data-tip="10">+10</span>
                                                     <span class="badge badge-primary me-2 c-pointer" data-tip="15">+15</span>
                                                 </div>
+
                                                 <div class="bill-details mt-4 border-bottom">
                                                     <h6>Bill Details</h6>
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <span>Item Total</span>
-                                                        <span id="cartTotal"><i class="fa-solid fa-dollar-sign"></i></span>
+                                                        <span>Сумма заказа</span>
+                                                        <span id="cartTotal">$@Model.CartTotal.ToString("F2")</span>
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <span>Tip Amount</span>
-                                                        <span id="tipAmount"><i class="fa-solid fa-dollar-sign"></i></span>
+                                                        <span>Чаевые</span>
+                                                        <span id="tipAmount">$0.00</span>
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <span>Total</span>
-                                                        <span id="totalAmount"><i class="fa-solid fa-dollar-sign"></i></span>
+                                                        <span>Итого</span>
+                                                        <span id="totalAmount">$@Model.CartTotal.ToString("F2")</span>
                                                     </div>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary btn-block" id="b3">PLACE ORDER</button>
@@ -146,17 +187,27 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.badge-primary').forEach(badge => {
-            badge.addEventListener('click', function () {
-                const tip = parseInt(this.getAttribute('data-tip'));
-                document.getElementById('tipAmount').innerHTML = `<i class="fa-solid fa-dollar-sign"></i>${tip}`;
-                const cartTotal = parseFloat(document.getElementById('cartTotal').textContent.replace('$', ''));
-                const total = cartTotal + tip;
-                document.getElementById('totalAmount').innerHTML = `<i class="fa-solid fa-dollar-sign"></i>${total}`;
-                document.querySelector('input[name="TipAmount"]').value = tip;
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartTotal = parseFloat('@Model.CartTotal.ToString("F2")');
+            
+            document.querySelectorAll('.badge-primary').forEach(badge => {
+                badge.addEventListener('click', function () {
+                    // Убираем активный класс со всех бейджей
+                    document.querySelectorAll('.badge-primary').forEach(b => b.classList.remove('active'));
+                    // Добавляем активный класс текущему бейджу
+                    this.classList.add('active');
+
+                    const tip = parseInt(this.getAttribute('data-tip'));
+                    document.getElementById('tipAmount').textContent = `$${tip.toFixed(2)}`;
+                    document.querySelector('input[name="TipAmount"]').value = tip;
+
+                    const total = cartTotal + tip;
+                    document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+                });
             });
         });
-    });
-</script>
+    </script>
+}

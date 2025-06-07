@@ -1,5 +1,4 @@
-﻿@model FoodDesk.WEB.Models.SettingsViewModel
-@{
+﻿@{
 	ViewData["Title"] = "Setting Page";
 }
 
@@ -99,7 +98,7 @@
 													</div>
 												</div>
 												<div class="change-btn d-flex align-items-center flex-wrap">
-													<input type="file" class="form-control" id="imageUpload" name="ProfileImage" accept=".png, .jpg, .jpeg" />
+													<input type="file" class="form-control" id="imageUpload" name="ImageFile" accept=".png, .jpg, .jpeg" />
 													<label for="imageUpload" class="dlab-upload">Choose File</label>
 													<a href="javascript:void(0);" class="btn remove-img ms-2" onclick="removeImage()">Remove</a>
 												</div>
@@ -107,7 +106,7 @@
 										</div>
 									</div>
 
-									<form asp-action="Index" method="post" enctype="multipart/form-data">
+									<form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
 										@Html.AntiForgeryToken()
 										<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 										<div class="row">

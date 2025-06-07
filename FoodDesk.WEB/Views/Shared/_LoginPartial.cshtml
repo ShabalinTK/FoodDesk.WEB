@@ -7,14 +7,17 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+	var user = await UserManager.GetUserAsync(User);
+	var imageUrl = string.IsNullOrEmpty(user?.ProfileImageUrl) ? "/FoodDesk/images/no-img-avatar.png" : user.ProfileImageUrl;
+	
 	<li>
-		<div class="dropdown header-profile2 ">
-			<a class="nav-link " href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
+		<div class="dropdown header-profile2">
+			<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
 				<div class="header-info2 d-flex align-items-center">
-						<img src="~/FoodDesk/images/banner-img/pic-1.png" alt="">
+					<img src="@imageUrl" alt="" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
 					<div class="d-flex align-items-center sidebar-info">
 						<div>
-							<h6 class="font-w500 mb-0 ms-2">@UserManager.GetUserName(User)</h6>
+							<h6 class="font-w500 mb-0 ms-2">@user?.UserName</h6>
 						</div>
 						<i class="fas fa-chevron-down"></i>
 					</div>
@@ -55,11 +58,11 @@
 }
 else
 {
-    <li class="nav-item">
-			<a class="nav-link text-dark" id="register" href="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="login" href="/Account/Login">Login</a>
-    </li>
+	<li class="nav-item">
+		<a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+	</li>
 }
 </ul>

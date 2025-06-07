@@ -1,18 +1,21 @@
-﻿using FoodDesk.Infrastructure.Identity;
-using FoodDesk.WEB.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using FoodDesk.Infrastructure.Identity;
+using FoodDesk.WEB.Models;
 
 namespace FoodDesk.WEB.Controllers;
 
-[Authorize(Roles = "client")]
+[Authorize]
 public class SettingController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    public SettingController(UserManager<ApplicationUser> userManager)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+
+    public SettingController(UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment)
     {
         _userManager = userManager;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     public async Task<IActionResult> Index()
@@ -25,23 +28,22 @@ public class SettingController : Controller
 
         var model = new SettingsViewModel
         {
-            UserName = user.UserName,
-            PhoneNumber = user.PhoneNumber,
-            Email = user.Email,
-            Address = user.Address,
-            ProfileImageUrl = user.ProfileImageUrl
+            UserName = user.UserName ?? "",
+            Email = user.Email ?? "",
+            PhoneNumber = user.PhoneNumber ?? "",
+            Address = user.Address ?? "",
+            ProfileImageUrl = string.IsNullOrEmpty(user.ProfileImageUrl) ? "/FoodDesk/images/no-img-avatar.png" : user.ProfileImageUrl
         };
 
         return View(model);
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Index(SettingsViewModel model)
+    public async Task<IActionResult> UpdateProfile(SettingsViewModel model)
     {
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View("Index", model);
         }
 
         var user = await _userManager.GetUserAsync(User);
@@ -50,49 +52,61 @@ public class SettingController : Controller
             return NotFound();
         }
 
-        // Обновляем данные пользователя
+        // Обработка загрузки изображения
+        if (model.ImageFile != null)
+        {
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "FoodDesk", "images", "avatars");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            string uniqueFileName = $"{Guid.NewGuid()}_{model.ImageFile.FileName}";
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.ImageFile.CopyToAsync(fileStream);
+            }
+
+            user.ProfileImageUrl = $"/FoodDesk/images/avatars/{uniqueFileName}";
+        }
+
+        // Обновление данных пользователя
         user.UserName = model.UserName;
-        user.PhoneNumber = model.PhoneNumber;
         user.Email = model.Email;
+        user.PhoneNumber = model.PhoneNumber;
         user.Address = model.Address;
 
-        // Обновляем пароль, если он указан
+        var result = await _userManager.UpdateAsync(user);
+
+        // Обновление пароля, если он был указан
         if (!string.IsNullOrEmpty(model.Password))
         {
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
-            if (!result.Succeeded)
+            var passwordResult = await _userManager.ResetPasswordAsync(user, token, model.Password);
+            
+            if (!passwordResult.Succeeded)
             {
-                foreach (var error in result.Errors)
+                foreach (var error in passwordResult.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-                return View(model);
+                return View("Index", model);
             }
         }
 
-        // Обновляем изображение профиля, если загружено
-        if (model.ProfileImage != null)
+        if (result.Succeeded)
         {
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ProfileImage.FileName);
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles", fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await model.ProfileImage.CopyToAsync(stream);
-            }
-            user.ProfileImageUrl = $"/images/profiles/{fileName}";
+            TempData["SuccessMessage"] = "Профиль успешно обновлен";
+            return RedirectToAction(nameof(Index));
         }
 
-        var updateResult = await _userManager.UpdateAsync(user);
-        if (!updateResult.Succeeded)
+        foreach (var error in result.Errors)
         {
-            foreach (var error in updateResult.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-            return View(model);
+            ModelState.AddModelError(string.Empty, error.Description);
         }
 
-        return RedirectToAction("Index");
+        return View("Index", model);
     }
 }

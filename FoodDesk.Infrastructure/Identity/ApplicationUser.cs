@@ -6,6 +6,6 @@ public class ApplicationUser : IdentityUser
 {
     public bool IsCourier { get; set; }
     public string Address { get; set; } = "";
-    public string ProfileImageUrl { get; set; }
+    public string ProfileImageUrl { get; set; } = "";
 }
         
