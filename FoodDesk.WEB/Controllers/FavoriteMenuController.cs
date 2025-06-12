@@ -6,7 +6,7 @@ using FoodDesk.Domain.Entities;
 
 namespace FoodDesk.WEB.Controllers;
 
-[Authorize(Roles = "client")]
+[Authorize]
 public class FavoriteMenuController : Controller
 {
     private readonly ApplicationDbContext _context;

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FoodDesk.WEB.Controllers;
 
-[Authorize(Roles = "client")]
+[Authorize]
 public class NotificationController : Controller
 {
     public IActionResult Index()

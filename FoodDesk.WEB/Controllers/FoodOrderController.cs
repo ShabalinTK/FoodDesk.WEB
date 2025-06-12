@@ -8,7 +8,7 @@ using FoodDesk.WEB.Models;
 
 namespace FoodDesk.WEB.Controllers;
 
-[Authorize(Roles = "client")]
+[Authorize]
 public class FoodOrderController : Controller
 {
     private readonly ApplicationDbContext _context;
