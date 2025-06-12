@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FoodDesk.WEB.Controllers;
 
-[Authorize(Roles = "courier")]
+[Authorize(Roles = "courier, admin")]
 public class DeliverMainController : Controller
 {
     public IActionResult Index()

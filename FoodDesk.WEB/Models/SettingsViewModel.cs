@@ -23,10 +23,10 @@ public class SettingsViewModel
     public string Address { get; set; } = "";
 
     [Display(Name = "Password")]
-    [StringLength(100, ErrorMessage = "Пароль должен быть не менее {2} символов.", MinimumLength = 6)]
-    public string Password { get; set; } = "";
+    [StringLength(100, ErrorMessage = "The password must be at least {2} characters long.", MinimumLength = 6)]
+    public string? Password { get; set; }
 
-    public string ProfileImageUrl { get; set; } = "";
+    //public string ProfileImageUrl { get; set; } = "";
 
-    public IFormFile ImageFile { get; set; } = null!;
+    //public IFormFile? ImageFile { get; set; }
 }
