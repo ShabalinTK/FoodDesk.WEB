@@ -4,8 +4,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-20">
-    <h2 class="mb-3">Products List</h2>
+<div class="container pt-5 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Products List</h2>
+        <a href="@Url.Action("Create", "Products")" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Add Product
+        </a>
+    </div>
+
     <div class="card shadow-sm">
         <div class="card-body p-0">
             <div class="table-responsive">

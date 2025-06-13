@@ -37,4 +37,19 @@ public class FavoriteMenuController : Controller
 
         return View(products);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> ProductGrid(int page = 1)
+    {
+        var query = _context.Products
+            .Include(p => p.Category)
+            .OrderBy(p => p.Name);
+
+        var products = await query
+            .Skip((page - 1) * PageSize)
+            .Take(PageSize)
+            .ToListAsync();
+
+        return PartialView("~/Views/FavoriteMenu/_ProductGridPartial.cshtml", products);
+    }
 }
