@@ -10,8 +10,8 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title mb-4">Edit Product</h2>
-                    <form asp-action="Edit" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <form id="product-edit-form" asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" id="validation-summary"></div>
                         <input type="hidden" asp-for="Id" />
 
                         <div class="mb-3">
@@ -70,4 +70,33 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(function () {
+            $('#product-edit-form').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var formData = form.serialize();
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        if ($(data).find('.validation-summary-errors, .text-danger').length > 0) {
+                            $('#validation-summary').html($(data).find('#validation-summary').html());
+                            form.find('.text-danger').each(function () {
+                                var name = $(this).attr('data-valmsg-for');
+                                var error = $(data).find('[data-valmsg-for="' + name + '"]').html();
+                                $(this).html(error);
+                            });
+                        } else {
+                            window.location.href = '/AdminPanel/Products';
+                        }
+                    },
+                    error: function () {
+                        alert('Ошибка при отправке формы');
+                    }
+                });
+            });
+        });
+    </script>
 } 

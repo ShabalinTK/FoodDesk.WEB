@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using FoodDesk.WEB.Logging;
 
 namespace FoodDesk.WEB;
 
@@ -83,6 +84,8 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseMiddleware<UserActionLoggingMiddleware>();
 
         app.UseEndpoints(endpoints =>
         {

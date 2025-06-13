@@ -10,38 +10,32 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title mb-4">Create New User</h2>
-                    <form asp-action="Create" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+                    <form id="user-create-form" asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" id="validation-summary"></div>
                         <div class="mb-3">
                             <label asp-for="UserName" class="form-label">Username</label>
                             <input asp-for="UserName" class="form-control" />
                             <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
-
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label">Email</label>
                             <input asp-for="Email" class="form-control" type="email" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
-
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input name="password" id="password" class="form-control" type="password" required />
                         </div>
-
                         <div class="mb-3">
                             <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
                             <input asp-for="PhoneNumber" class="form-control" />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
-
                         <div class="mb-3">
                             <label asp-for="Address" class="form-label">Address</label>
                             <input asp-for="Address" class="form-control" />
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Roles</label>
                             <div class="row">
@@ -56,7 +50,6 @@
                                 }
                             </div>
                         </div>
-
                         <div class="d-flex justify-content-between">
                             <a asp-action="Index" class="btn btn-secondary">Back to List</a>
                             <button type="submit" class="btn btn-primary">Create</button>
@@ -67,7 +60,37 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(function () {
+            $('#user-create-form').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var formData = form.serialize();
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        if ($(data).find('.validation-summary-errors, .text-danger').length > 0) {
+                            // Ошибки валидации
+                            $('#validation-summary').html($(data).find('#validation-summary').html());
+                            form.find('.text-danger').each(function () {
+                                var name = $(this).attr('data-valmsg-for');
+                                var error = $(data).find('[data-valmsg-for="' + name + '"]').html();
+                                $(this).html(error);
+                            });
+                        } else {
+                            // Успех — редирект или сообщение
+                            window.location.href = '/AdminPanel/Users';
+                        }
+                    },
+                    error: function () {
+                        alert('Ошибка при отправке формы');
+                    }
+                });
+            });
+        });
+    </script>
 } 

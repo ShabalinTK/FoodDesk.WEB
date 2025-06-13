@@ -4,16 +4,19 @@ using FoodDesk.Application.Features.Auth.Queries.Login;
 using FoodDesk.WEB.Models.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace FoodDesk.WEB.Controllers;
 
 public class AccountController : Controller
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<AccountController> _logger;
 
-    public AccountController(IMediator mediator)
+    public AccountController(IMediator mediator, ILogger<AccountController> logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -26,13 +29,13 @@ public class AccountController : Controller
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         var query = new LoginQuery(model.Email, model.Password);
-
         var IsSuccess = await _mediator.Send(query);
-
         if (IsSuccess)
+        {
+            _logger.LogInformation("User logged in: {Email}", model.Email);
             return RedirectToAction("Index", "Home");
-
-        //ModelState.AddModelError(string.Empty, result.Error);
+        }
+        _logger.LogWarning("Login failed for: {Email}", model.Email);
         return View(model);
     }
 
@@ -53,13 +56,13 @@ public class AccountController : Controller
             ConfirmPassword = model.ConfirmPassword,
             IsCourier = model.IsCourier
         };
-
         var IsSuccess = await _mediator.Send(command);
-
         if (IsSuccess)
+        {
+            _logger.LogInformation("User registered: {Email}", model.Email);
             return RedirectToAction("Index", "Home");
-
-        //ModelState.AddModelError(string.Empty, result.Error);
+        }
+        _logger.LogWarning("Registration failed for: {Email}", model.Email);
         return View(model);
     }
 

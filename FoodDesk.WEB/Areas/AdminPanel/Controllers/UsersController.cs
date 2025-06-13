@@ -63,21 +63,14 @@ public class UsersController : Controller
     public async Task<IActionResult> Create(UserViewModel model, string password, List<string> selectedRoles)
     {
         ModelState.Remove("Id");
-        ModelState.Remove("Roles"); // Удаляем ошибку по Roles
-
-        model.Roles = selectedRoles ?? new List<string>(); // <-- ВСТАВИТЬ СЮДА
-
+        ModelState.Remove("Roles");
+        model.Roles = selectedRoles ?? new List<string>();
         if (!ModelState.IsValid)
         {
-            _logger.LogWarning("Model validation failed: {Errors}", 
-                string.Join(", ", ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)));
-            
+            _logger.LogWarning("User creation validation failed: {Errors}", string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
             ViewBag.Roles = await _roleManager.Roles.ToListAsync();
             return View(model);
         }
-
         var user = new ApplicationUser
         {
             UserName = model.UserName,
@@ -85,7 +78,6 @@ public class UsersController : Controller
             PhoneNumber = model.PhoneNumber,
             Address = model.Address
         };
-
         var result = await _userManager.CreateAsync(user, password);
         if (result.Succeeded)
         {
@@ -93,15 +85,14 @@ public class UsersController : Controller
             {
                 await _userManager.AddToRolesAsync(user, selectedRoles);
             }
+            _logger.LogInformation("User created: {Email}", user.Email);
             return RedirectToAction(nameof(Index));
         }
-
         foreach (var error in result.Errors)
         {
             ModelState.AddModelError(string.Empty, error.Description);
             _logger.LogError("User creation failed: {Error}", error.Description);
         }
-
         ViewBag.Roles = await _roleManager.Roles.ToListAsync();
         return View(model);
     }
@@ -136,12 +127,10 @@ public class UsersController : Controller
         ModelState.Remove("Id");
         ModelState.Remove("Roles");
         model.Roles = selectedRoles ?? new List<string>();
-
         if (id != model.Id)
         {
             return NotFound();
         }
-
         if (ModelState.IsValid)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -149,12 +138,10 @@ public class UsersController : Controller
             {
                 return NotFound();
             }
-
             user.UserName = model.UserName;
             user.Email = model.Email;
             user.PhoneNumber = model.PhoneNumber;
             user.Address = model.Address;
-
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
@@ -172,23 +159,20 @@ public class UsersController : Controller
                         return View(model);
                     }
                 }
-
                 var currentRoles = await _userManager.GetRolesAsync(user);
                 await _userManager.RemoveFromRolesAsync(user, currentRoles);
                 if (selectedRoles != null && selectedRoles.Any())
                 {
                     await _userManager.AddToRolesAsync(user, selectedRoles);
                 }
-
+                _logger.LogInformation("User edited: {Email}", user.Email);
                 return RedirectToAction(nameof(Index));
             }
-
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
-
         ViewBag.Roles = await _roleManager.Roles.ToListAsync();
         return View(model);
     }
@@ -197,12 +181,12 @@ public class UsersController : Controller
     public async Task<ActionResult> Delete(string id)
     {
         ApplicationUser user = await _userManager.FindByIdAsync(id);
-
         if (user != null)
         {
             IdentityResult result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
+                _logger.LogInformation("User deleted: {Email}", user.Email);
                 return RedirectToAction("Index");
             }
             else

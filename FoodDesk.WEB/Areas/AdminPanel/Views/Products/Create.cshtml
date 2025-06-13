@@ -10,8 +10,8 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title mb-4">Create New Product</h2>
-                    <form asp-action="Create" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <form id="product-create-form" asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" id="validation-summary"></div>
 
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label">Name</label>
@@ -69,4 +69,33 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(function () {
+            $('#product-create-form').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var formData = form.serialize();
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        if ($(data).find('.validation-summary-errors, .text-danger').length > 0) {
+                            $('#validation-summary').html($(data).find('#validation-summary').html());
+                            form.find('.text-danger').each(function () {
+                                var name = $(this).attr('data-valmsg-for');
+                                var error = $(data).find('[data-valmsg-for="' + name + '"]').html();
+                                $(this).html(error);
+                            });
+                        } else {
+                            window.location.href = '/AdminPanel/Products';
+                        }
+                    },
+                    error: function () {
+                        alert('Ошибка при отправке формы');
+                    }
+                });
+            });
+        });
+    </script>
 } 

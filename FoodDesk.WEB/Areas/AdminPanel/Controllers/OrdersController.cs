@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FoodDesk.Persistence.Context;
 using FoodDesk.WEB.Areas.AdminPanel.Models;
+using Microsoft.Extensions.Logging;
 
 namespace FoodDesk.WEB.Areas.AdminPanel.Controllers;
 
@@ -11,10 +12,12 @@ namespace FoodDesk.WEB.Areas.AdminPanel.Controllers;
 public class OrdersController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<OrdersController> _logger;
 
-    public OrdersController(ApplicationDbContext context)
+    public OrdersController(ApplicationDbContext context, ILogger<OrdersController> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     public async Task<IActionResult> Index()
@@ -117,13 +120,9 @@ public class OrdersController : Controller
         {
             return NotFound();
         }
-
-        // Логирование для отладки
-        Console.WriteLine($"Updating order {id} to status: {status}");
-
+        _logger.LogInformation("Order status update: OrderId={OrderId}, NewStatus={Status}", id, status);
         order.Status = status;
         await _context.SaveChangesAsync();
-
         return RedirectToAction(nameof(Index));
     }
 }
