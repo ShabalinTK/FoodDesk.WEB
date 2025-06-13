@@ -1,0 +1,19 @@
+@model IEnumerable<string>
+
+@{
+    ViewData["Title"] = "Error";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-20">
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">Error!</h4>
+        <ul>
+            @foreach (var error in Model)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+    <a href="javascript:history.back()" class="btn btn-primary">Back</a>
+</div> 

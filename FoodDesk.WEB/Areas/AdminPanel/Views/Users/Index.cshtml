@@ -1,0 +1,58 @@
+@model List<FoodDesk.WEB.Areas.AdminPanel.Models.UserViewModel>
+@{
+    ViewData["Title"] = "Users Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-20">
+    <h2 class="mb-3">Users List</h2>
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover table-bordered text-center align-middle mb-0" style="font-size: 0.875rem;">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-nowrap">Id</th>
+                            <th class="text-nowrap">UserName</th>
+                            <th class="text-nowrap">Email</th>
+                            <th class="text-nowrap">Phone</th>
+                            <th class="text-nowrap">Address</th>
+                            <th class="text-nowrap">Roles</th>
+                            <th class="text-nowrap">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>@user.PhoneNumber</td>
+                                <td>@user.Address</td>
+                                <td>@string.Join(", ", user.Roles)</td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="@Url.Action("Edit", "Users", new { id = user.Id })"
+                                           class="btn btn-outline-warning btn-sm px-2 py-1"
+                                           title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        @using (Html.BeginForm("Delete", "Users", new { id = user.Id }))
+                                        {
+                                            <button class="btn btn-outline-danger btn-sm px-2 py-1"
+                                                    type="submit"
+                                                    title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

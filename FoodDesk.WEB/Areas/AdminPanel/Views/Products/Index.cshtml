@@ -1,0 +1,73 @@
+@model List<FoodDesk.WEB.Areas.AdminPanel.Models.ProductViewModel>
+@{
+    ViewData["Title"] = "Products Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-20">
+    <h2 class="mb-3">Products List</h2>
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover table-bordered text-center align-middle mb-0" style="font-size: 0.875rem;">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-nowrap">Id</th>
+                            <th class="text-nowrap">Image</th>
+                            <th class="text-nowrap">Name</th>
+                            <th class="text-nowrap">Price</th>
+                            <th class="text-nowrap">Discount</th>
+                            <th class="text-nowrap">Rating</th>
+                            <th class="text-nowrap">Category</th>
+                            <th class="text-nowrap">Popular</th>
+                            <th class="text-nowrap">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model)
+                        {
+                            <tr>
+                                <td>@product.Id</td>
+                                <td>
+                                    <img src="@product.ImageUrl" alt="product" width="40" height="40" class="rounded-circle" />
+                                </td>
+                                <td>@product.Name</td>
+                                <td>@product.Price</td>
+                                <td>@product.Discount</td>
+                                <td>@product.Rating</td>
+                                <td>@product.CategoryId</td>
+                                <td>
+                                    @if (product.IsPopular)
+                                    {
+                                        <span class="badge bg-success">Yes</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">No</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="@Url.Action("Edit", "Products", new { id = product.Id })"
+                                           class="btn btn-outline-warning btn-sm px-2 py-1"
+                                           title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        @using (Html.BeginForm("Delete", "Products", new { id = product.Id }))
+                                        {
+                                            <button class="btn btn-outline-danger btn-sm px-2 py-1"
+                                                    type="submit"
+                                                    title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
