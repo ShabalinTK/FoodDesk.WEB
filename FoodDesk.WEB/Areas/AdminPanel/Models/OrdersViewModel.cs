@@ -1,6 +1,11 @@
-using FoodDesk.Domain.Entities;
+namespace FoodDesk.WEB.Areas.AdminPanel.Models;
 
-namespace FoodDesk.WEB.Models;
+public class OrdersViewModel
+{
+    public List<OrderViewModel> PendingOrders { get; set; } = new List<OrderViewModel>();
+    public List<OrderViewModel> ConfirmedOrders { get; set; } = new List<OrderViewModel>();
+    public List<OrderViewModel> DeliveredOrders { get; set; } = new List<OrderViewModel>();
+}
 
 public class OrderViewModel
 {

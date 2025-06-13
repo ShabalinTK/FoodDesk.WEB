@@ -1,0 +1,59 @@
+@model FoodDesk.WEB.Areas.AdminPanel.Models.OrderViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title">Order #@Model.Id Details</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <p><strong>Restaurant:</strong> @Model.RestaurantName</p>
+            <p><strong>Order Date:</strong> @Model.CreatedAt.ToString("g")</p>
+            <p><strong>Delivery Time:</strong> @Model.DeliveryTime.ToString("g")</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Distance:</strong> @Model.Distance km</p>
+            <p><strong>Status:</strong> <span class="badge bg-@(Model.Status.ToLower() == "completed" ? "success" : "warning")">@Model.Status</span></p>
+            <p><strong>Total Amount:</strong> $@Model.TotalAmount.ToString("F2")</p>
+        </div>
+    </div>
+
+    <h6 class="mb-3">Order Items</h6>
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.ImageUrl" alt="@item.Name" class="img-thumbnail" style="width: 40px; height: 40px; object-fit: cover;">
+                        </td>
+                        <td>@item.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>$@item.Price.ToString("F2")</td>
+                        <td>$@((item.Price * item.Quantity).ToString("F2"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    @if (Model.Status.ToLower() != "completed")
+    {
+        <form asp-action="UpdateStatus" method="post" class="d-inline">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <input type="hidden" name="status" value="completed" />
+        </form>
+    }
+</div> 
