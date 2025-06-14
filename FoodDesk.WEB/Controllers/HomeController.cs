@@ -183,4 +183,10 @@ public class HomeController : Controller
         var cart = GetCartFromSession();
         return Json(new { success = true, cart });
     }
+
+    [HttpGet("/health")]
+    public IActionResult Health()
+    {
+        return Ok("Healthy");
+    }
 }
