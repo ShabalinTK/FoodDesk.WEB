@@ -11,7 +11,7 @@ services:
         fromDatabase:
           name: fooddesk-db
           property: connectionString
-      - key: REDIS_URL
+      - key: Redis__Configuration
         fromDatabase:
           name: fooddesk-redis
           property: connectionString

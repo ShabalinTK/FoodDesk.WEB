@@ -41,9 +41,15 @@ public class Program
         builder.Services.AddSignalR();
 
         // Добавляем Redis кэширование
+        var redisConnection = builder.Configuration.GetSection("Redis:Configuration").Value;
+        if (string.IsNullOrEmpty(redisConnection))
+        {
+            redisConnection = "localhost:6379";
+        }
+
         builder.Services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = builder.Configuration.GetSection("Redis:Configuration").Value;
+            options.Configuration = redisConnection;
             options.InstanceName = "FoodDesk_";
         });
 
