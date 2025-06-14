@@ -56,24 +56,39 @@ public class HomeController : Controller
     private async Task<List<Category>> GetCategoriesFromCache()
     {
         const string cacheKey = "categories";
-        var cachedCategories = await _cache.GetStringAsync(cacheKey);
-        
-        if (!string.IsNullOrEmpty(cachedCategories))
+        try
         {
-            _logger.LogInformation("Categories retrieved from Redis cache");
-            return JsonSerializer.Deserialize<List<Category>>(cachedCategories, _jsonOptions);
+            var cachedCategories = await _cache.GetStringAsync(cacheKey);
+            
+            if (!string.IsNullOrEmpty(cachedCategories))
+            {
+                _logger.LogInformation("Categories retrieved from cache");
+                return JsonSerializer.Deserialize<List<Category>>(cachedCategories, _jsonOptions);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to retrieve categories from cache");
         }
 
         _logger.LogInformation("Categories retrieved from database");
         var categories = await _context.Categories.ToListAsync();
-        var options = new DistributedCacheEntryOptions()
-            .SetSlidingExpiration(TimeSpan.FromHours(24)); // Кэш на 24 часа
+        
+        try
+        {
+            var options = new DistributedCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromHours(24)); // Кэш на 24 часа
 
-        await _cache.SetStringAsync(
-            cacheKey,
-            JsonSerializer.Serialize(categories, _jsonOptions),
-            options);
-        _logger.LogInformation("Categories saved to Redis cache");
+            await _cache.SetStringAsync(
+                cacheKey,
+                JsonSerializer.Serialize(categories, _jsonOptions),
+                options);
+            _logger.LogInformation("Categories saved to cache");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to save categories to cache");
+        }
 
         return categories;
     }
@@ -81,12 +96,19 @@ public class HomeController : Controller
     private async Task<List<Product>> GetPopularProductsFromCache()
     {
         const string cacheKey = "popular_products";
-        var cachedProducts = await _cache.GetStringAsync(cacheKey);
-        
-        if (!string.IsNullOrEmpty(cachedProducts))
+        try
         {
-            _logger.LogInformation("Popular products retrieved from Redis cache");
-            return JsonSerializer.Deserialize<List<Product>>(cachedProducts, _jsonOptions);
+            var cachedProducts = await _cache.GetStringAsync(cacheKey);
+            
+            if (!string.IsNullOrEmpty(cachedProducts))
+            {
+                _logger.LogInformation("Popular products retrieved from cache");
+                return JsonSerializer.Deserialize<List<Product>>(cachedProducts, _jsonOptions);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to retrieve popular products from cache");
         }
 
         _logger.LogInformation("Popular products retrieved from database");
@@ -95,14 +117,21 @@ public class HomeController : Controller
             .Where(p => p.IsPopular)
             .ToListAsync();
 
-        var options = new DistributedCacheEntryOptions()
-            .SetSlidingExpiration(TimeSpan.FromHours(1)); // Кэш на 1 час
+        try
+        {
+            var options = new DistributedCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromHours(1)); // Кэш на 1 час
 
-        await _cache.SetStringAsync(
-            cacheKey,
-            JsonSerializer.Serialize(products, _jsonOptions),
-            options);
-        _logger.LogInformation("Popular products saved to Redis cache");
+            await _cache.SetStringAsync(
+                cacheKey,
+                JsonSerializer.Serialize(products, _jsonOptions),
+                options);
+            _logger.LogInformation("Popular products saved to cache");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to save popular products to cache");
+        }
 
         return products;
     }

@@ -40,18 +40,8 @@ public class Program
         // Добавляем SignalR
         builder.Services.AddSignalR();
 
-        // Добавляем Redis кэширование
-        var redisConnection = builder.Configuration.GetSection("Redis:Configuration").Value;
-        if (string.IsNullOrEmpty(redisConnection))
-        {
-            redisConnection = "localhost:6379";
-        }
-
-        builder.Services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = redisConnection;
-            options.InstanceName = "FoodDesk_";
-        });
+        // Добавляем in-memory кэширование
+        builder.Services.AddDistributedMemoryCache();
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer();
