@@ -88,7 +88,7 @@ public class CheckoutController : Controller
             {
                 UserId = user.Id,
                 TotalAmount = totalAmount,
-                Status = "Preparing",
+                Status = "Pending",
                 CreatedAt = DateTime.UtcNow,
                 RestaurantName = "FoodDesk Restaurant",
                 DeliveryTime = 45,

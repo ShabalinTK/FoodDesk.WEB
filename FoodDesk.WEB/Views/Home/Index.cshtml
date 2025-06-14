@@ -338,18 +338,26 @@
 		$(document).ready(function () {
 			updateCart();
 
-			$('.plus').click(function () {
+			$(document).on('click', '.plus.c-pointer', function (e) {
+				e.preventDefault();
+				console.log('Plus button clicked');
 				var productId = $(this).data('product-id');
+				console.log('Product ID:', productId);
+				
 				$.ajax({
 					url: '/Home/AddToCart',
 					type: 'POST',
 					data: { productId: productId },
 					success: function (response) {
+						console.log('Add to cart response:', response);
 						if (response.success) {
 							updateCartDisplay(response.cart);
+						} else {
+							alert(response.message || 'Ошибка при добавлении товара в корзину');
 						}
 					},
-					error: function () {
+					error: function (xhr, status, error) {
+						console.error('Add to cart error:', error);
 						alert('Ошибка при добавлении товара в корзину');
 					}
 				});
