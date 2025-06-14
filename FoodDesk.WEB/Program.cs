@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using FoodDesk.WEB.Logging;
 using FoodDesk.WEB.Hubs;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
+using StackExchange.Redis;
 
 namespace FoodDesk.WEB;
 
@@ -43,7 +44,15 @@ public class Program
         builder.Services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = builder.Configuration.GetSection("Redis:Configuration").Value;
-            options.InstanceName = "FoodDesk_";
+            options.InstanceName = builder.Configuration.GetSection("Redis:InstanceName").Value;
+            options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions
+            {
+                EndPoints = { builder.Configuration.GetSection("Redis:Configuration").Value },
+                ConnectTimeout = 5000,
+                SyncTimeout = 5000,
+                AbortOnConnectFail = false,
+                AllowAdmin = true
+            };
         });
 
         builder.Services.AddApplicationLayer();
