@@ -1,92 +1,58 @@
 ﻿@model IEnumerable<FoodDesk.WEB.ViewModels.NotificationViewModel>
 
 @{
-    ViewData["Title"] = "Уведомления";
+    ViewData["Title"] = "Notifications";
 }
 
-<div class="container mt-4">
-    <h2>Уведомления</h2>
-    <div id="notificationList">
-        <!-- Уведомления будут добавлены через JavaScript -->
+<div class="content-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Notifications</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="notifications-list">
+                            <!-- Notifications will be added here dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             const connection = new signalR.HubConnectionBuilder()
                 .withUrl("/notificationHub")
                 .withAutomaticReconnect()
                 .build();
 
-            // Функция для создания HTML уведомления
-            function createNotificationElement(notification) {
-                return `
-                    <div class="card mb-3 ${notification.isRead ? 'bg-light' : ''}" data-notification-id="${notification.id}">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h5 class="card-title">${notification.title}</h5>
-                                <small class="text-muted">${new Date(notification.createdAt).toLocaleString()}</small>
-                            </div>
-                            <p class="card-text">${notification.message}</p>
-                            <div class="d-flex justify-content-end">
-                                ${!notification.isRead ? 
-                                    `<button class="btn btn-sm btn-outline-primary me-2 mark-as-read">Отметить как прочитанное</button>` : 
-                                    ''}
-                                <button class="btn btn-sm btn-outline-danger delete-notification">Удалить</button>
-                            </div>
-                        </div>
+            connection.on("ReceiveOrderNotification", function (message) {
+                addNotification(message);
+            });
+
+            connection.start()
+                .then(function () {
+                    console.log("SignalR Connected");
+                })
+                .catch(function (err) {
+                    console.error(err.toString());
+                });
+
+            function addNotification(message) {
+                const notification = `
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 `;
+                $('#notifications-list').prepend(notification);
             }
-
-            // Загрузка уведомлений при подключении
-            connection.start().then(async function() {
-                const notifications = await connection.invoke("GetUserNotifications");
-                const notificationList = $("#notificationList");
-                
-                if (notifications.length === 0) {
-                    notificationList.html('<div class="alert alert-info">У вас пока нет уведомлений</div>');
-                } else {
-                    notificationList.html(notifications.map(createNotificationElement).join(''));
-                }
-            });
-
-            // Обработка новых уведомлений
-            connection.on("ReceiveNotification", function(notification) {
-                const notificationList = $("#notificationList");
-                const noNotifications = notificationList.find('.alert-info');
-                
-                if (noNotifications.length > 0) {
-                    notificationList.empty();
-                }
-                
-                notificationList.prepend(createNotificationElement(notification));
-            });
-
-            // Обработка отметки о прочтении
-            connection.on("NotificationMarkedAsRead", function(notificationId) {
-                const notification = $(`[data-notification-id="${notificationId}"]`);
-                notification.addClass('bg-light');
-                notification.find('.mark-as-read').remove();
-            });
-
-            // Обработка удаления
-            connection.on("NotificationDeleted", function(notificationId) {
-                $(`[data-notification-id="${notificationId}"]`).fadeOut();
-            });
-
-            // Обработчики кнопок
-            $(document).on('click', '.mark-as-read', function() {
-                const notificationId = $(this).closest('.card').data('notification-id');
-                connection.invoke("MarkAsRead", notificationId);
-            });
-
-            $(document).on('click', '.delete-notification', function() {
-                const notificationId = $(this).closest('.card').data('notification-id');
-                connection.invoke("DeleteNotification", notificationId);
-            });
         });
     </script>
 }	

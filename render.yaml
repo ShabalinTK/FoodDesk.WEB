@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: fooddesk
+    env: dotnet
+    buildCommand: dotnet publish -c Release -o ./publish
+    startCommand: dotnet ./publish/FoodDesk.WEB.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: fooddesk-db
+          property: connectionString
+      - key: Redis__Configuration
+        fromDatabase:
+          name: fooddesk-redis
+          property: connectionString
+
+databases:
+  - name: fooddesk-db
+    databaseName: fooddesk
+    user: fooddesk_user
+    plan: free
+
+  - name: fooddesk-redis
+    plan: free 

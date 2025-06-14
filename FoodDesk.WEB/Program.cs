@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using FoodDesk.WEB.Logging;
+using FoodDesk.WEB.Hubs;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 namespace FoodDesk.WEB;
 
@@ -32,6 +34,16 @@ public class Program
             options.IdleTimeout = TimeSpan.FromMinutes(30); // Время жизни сессии
             options.Cookie.HttpOnly = true; // Защита cookie
             options.Cookie.IsEssential = true; // Для GDPR
+        });
+
+        // Добавляем SignalR
+        builder.Services.AddSignalR();
+
+        // Добавляем Redis кэширование
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration.GetSection("Redis:Configuration").Value;
+            options.InstanceName = "FoodDesk_";
         });
 
         builder.Services.AddApplicationLayer();
@@ -89,6 +101,7 @@ public class Program
 
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapHub<NotificationHub>("/notificationHub");
             endpoints.MapControllerRoute(
                 name: "areas",
                 pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"

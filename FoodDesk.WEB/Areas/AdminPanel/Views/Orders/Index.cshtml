@@ -70,8 +70,9 @@
                                                 $@order.TotalAmount.ToString("F2")
                                             </div>
 
-                                            <form asp-action="UpdateStatus" asp-route-id="@order.Id" method="post" class="d-flex gap-1 align-items-center mb-0">
+                                            <form asp-action="UpdateStatus" asp-controller="Orders" asp-area="AdminPanel" method="post" class="d-flex gap-1 align-items-center mb-0">
                                                 @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@order.Id" />
 
                                                 <button type="submit" name="status" value="Delivered"
                                                         class="btn btn-outline-primary btn-sm px-2 py-1 small">
