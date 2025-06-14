@@ -44,15 +44,7 @@ public class Program
         builder.Services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = builder.Configuration.GetSection("Redis:Configuration").Value;
-            options.InstanceName = builder.Configuration.GetSection("Redis:InstanceName").Value;
-            options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions
-            {
-                EndPoints = { builder.Configuration.GetSection("Redis:Configuration").Value },
-                ConnectTimeout = 5000,
-                SyncTimeout = 5000,
-                AbortOnConnectFail = false,
-                AllowAdmin = true
-            };
+            options.InstanceName = "FoodDesk_";
         });
 
         builder.Services.AddApplicationLayer();
