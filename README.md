@@ -13,3 +13,9 @@
 📄 [Техническое задание (Google Docs)](https://docs.google.com/document/d/1k6VMk3XlYSfvMqyq9J3rSe4la2F4jMM-TwAIurDgZuE/edit?usp=sharing)
 
 ---
+
+## 🌐 Деплой
+
+Сайт доступен по ссылке:
+
+🔗 [FoodDesk](https://fooddesk-web.onrender.com/)
